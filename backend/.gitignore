@@ -1,0 +1,83 @@
+###> symfony/framework-bundle ###
+/.env.local
+/.env.local.php
+/.env.*.local
+/config/secrets/prod/prod.decrypt.private.php
+/public/bundles/
+/var/
+/vendor/
+###< symfony/framework-bundle ###
+
+###> lexik/jwt-authentication-bundle ###
+/config/jwt/*.pem
+###< lexik/jwt-authentication-bundle ###
+
+###> symfony/phpunit-bridge ###
+.phpunit.result.cache
+/phpunit.xml
+###< symfony/phpunit-bridge ###
+
+###> phpunit/phpunit ###
+/phpunit.xml
+.phpunit.result.cache
+###< phpunit/phpunit ###
+
+# Miscellaneous
+.DS_Store
+Thumbs.db
+ehthumbs.db
+
+# Composer
+/composer.lock
+/composer.phar
+
+# Node
+/node_modules/
+/yarn-error.log
+/yarn.lock
+
+# Symfony 4+ specific
+/.idea/
+/.vscode/
+*.swp
+*.swo
+*.sublime-workspace
+*.sublime-project
+
+# Docker
+docker-compose.override.yml
+.docker/
+
+# Symfony cache and logs
+/var/cache/
+/var/logs/
+/var/sessions/
+
+# .env files (generic)
+.env
+.env.php
+
+# Symfony backup
+.swp
+.swo
+
+# PHPStorm and other IDEs specific
+.idea/
+.vscode/
+
+# Mac system files
+.DS_Store
+
+# Windows system files
+Thumbs.db
+ehthumbs.db
+
+# Temporary files
+*.bak
+*.swp
+*.swo
+*.log
+*.sql
+*.tar.gz
+*.tar.bz2
+*.tgz

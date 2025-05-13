@@ -50,4 +50,46 @@ class OpenLibraryService
             }
         );
     }
+
+    /**
+     * Récupère les détails d'un livre par son ID Open Library
+     * 
+     * @param string $id L'ID du livre sur Open Library
+     * @return array Les détails du livre
+     */
+    public function getBookDetails(string $id): array
+    {
+        return $this->cache->get(
+            'book_details_' . $id,
+            function () use ($id) {
+                $response = $this->httpClient->request('GET', self::BASE_URL . '/works/' . $id . '.json');
+                return $response->toArray();
+            }
+        );
+    }
+
+    /**
+     * Recherche un livre par son ISBN
+     * 
+     * @param string $isbn L'ISBN du livre
+     * @return array<BookSearchResult> Les résultats de la recherche
+     */
+    public function searchByIsbn(string $isbn): array
+    {
+        return $this->cache->get(
+            'book_isbn_' . $isbn,
+            function () use ($isbn) {
+                $response = $this->httpClient->request('GET', self::BASE_URL . '/isbn/' . $isbn . '.json');
+                $data = $response->toArray();
+
+                return [BookSearchResult::fromArray([
+                    'title' => $data['title'] ?? null,
+                    'author_name' => $data['authors'][0]['name'] ?? null,
+                    'first_publish_year' => $data['publish_date'] ?? null,
+                    'cover_i' => $data['covers'][0] ?? null,
+                    'isbn' => $isbn,
+                ])];
+            }
+        );
+    }
 } 

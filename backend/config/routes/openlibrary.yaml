@@ -1,0 +1,6 @@
+openlibrary_routes:
+    resource:
+        path: ../../src/Controller/Api/OpenLibrary/
+        namespace: App\Controller\Api\OpenLibrary
+    type: attribute
+    prefix: /api/openlibrary 

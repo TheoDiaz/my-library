@@ -28,7 +28,120 @@ class ApiDocController extends AbstractController
                 'description' => 'API pour gérer une bibliothèque personnelle',
             ],
             'paths' => [
-                '/api/library_books' => [
+                '/api/openlibrary/search' => [
+                    'get' => [
+                        'summary' => 'Recherche des livres sur Open Library',
+                        'parameters' => [
+                            [
+                                'name' => 'q',
+                                'in' => 'query',
+                                'required' => true,
+                                'schema' => [
+                                    'type' => 'string'
+                                ],
+                                'description' => 'Terme de recherche'
+                            ]
+                        ],
+                        'responses' => [
+                            '200' => [
+                                'description' => 'Résultats de la recherche',
+                                'content' => [
+                                    'application/json' => [
+                                        'schema' => [
+                                            'type' => 'array',
+                                            'items' => [
+                                                'type' => 'object',
+                                                'properties' => [
+                                                    'title' => ['type' => 'string'],
+                                                    'author_name' => ['type' => 'string'],
+                                                    'first_publish_year' => ['type' => 'integer'],
+                                                    'cover_i' => ['type' => 'integer'],
+                                                    'isbn' => ['type' => 'string']
+                                                ]
+                                            ]
+                                        ]
+                                    ]
+                                ]
+                            ],
+                            '400' => [
+                                'description' => 'Paramètre de recherche manquant'
+                            ]
+                        ]
+                    ]
+                ],
+                '/api/openlibrary/details/{id}' => [
+                    'get' => [
+                        'summary' => 'Récupère les détails d\'un livre par son ID Open Library',
+                        'parameters' => [
+                            [
+                                'name' => 'id',
+                                'in' => 'path',
+                                'required' => true,
+                                'schema' => [
+                                    'type' => 'string'
+                                ],
+                                'description' => 'ID du livre sur Open Library'
+                            ]
+                        ],
+                        'responses' => [
+                            '200' => [
+                                'description' => 'Détails du livre',
+                                'content' => [
+                                    'application/json' => [
+                                        'schema' => [
+                                            'type' => 'object'
+                                        ]
+                                    ]
+                                ]
+                            ],
+                            '404' => [
+                                'description' => 'Livre non trouvé'
+                            ]
+                        ]
+                    ]
+                ],
+                '/api/openlibrary/isbn/{isbn}' => [
+                    'get' => [
+                        'summary' => 'Recherche un livre par son ISBN',
+                        'parameters' => [
+                            [
+                                'name' => 'isbn',
+                                'in' => 'path',
+                                'required' => true,
+                                'schema' => [
+                                    'type' => 'string'
+                                ],
+                                'description' => 'ISBN du livre'
+                            ]
+                        ],
+                        'responses' => [
+                            '200' => [
+                                'description' => 'Détails du livre',
+                                'content' => [
+                                    'application/json' => [
+                                        'schema' => [
+                                            'type' => 'array',
+                                            'items' => [
+                                                'type' => 'object',
+                                                'properties' => [
+                                                    'title' => ['type' => 'string'],
+                                                    'author_name' => ['type' => 'string'],
+                                                    'first_publish_year' => ['type' => 'integer'],
+                                                    'cover_i' => ['type' => 'integer'],
+                                                    'isbn' => ['type' => 'string']
+                                                ]
+                                            ]
+                                        ]
+                                    ]
+                                ]
+                            ],
+                            '404' => [
+                                'description' => 'Livre non trouvé'
+                            ]
+                        ]
+                    ]
+                ],
+                '/api/books' => [
                     'get' => [
                         'summary' => 'Récupère la liste des livres de la bibliothèque',
                         'responses' => [
@@ -46,6 +159,52 @@ class ApiDocController extends AbstractController
                         ],
                     ],
                 ],
+                '/api/books/{id}' => [
+                    'get' => [
+                        'summary' => 'Récupère les détails d\'un livre de la bibliothèque',
+                        'parameters' => [
+                            [
+                                'name' => 'id',
+                                'in' => 'path',
+                                'required' => true,
+                                'schema' => [
+                                    'type' => 'integer'
+                                ],
+                                'description' => 'ID du livre dans la bibliothèque'
+                            ]
+                        ],
+                        'responses' => [
+                            '200' => [
+                                'description' => 'Détails du livre',
+                            ],
+                            '404' => [
+                                'description' => 'Livre non trouvé'
+                            ]
+                        ]
+                    ],
+                    'delete' => [
+                        'summary' => 'Supprime un livre de la bibliothèque',
+                        'parameters' => [
+                            [
+                                'name' => 'id',
+                                'in' => 'path',
+                                'required' => true,
+                                'schema' => [
+                                    'type' => 'integer'
+                                ],
+                                'description' => 'ID du livre à supprimer'
+                            ]
+                        ],
+                        'responses' => [
+                            '204' => [
+                                'description' => 'Livre supprimé avec succès',
+                            ],
+                            '404' => [
+                                'description' => 'Livre non trouvé'
+                            ]
+                        ]
+                    ]
+                ]
             ],
         ];
 

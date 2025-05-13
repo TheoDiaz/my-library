@@ -115,4 +115,4 @@ class Book
         $this->owner = $owner;
         return $this;
     }
-} 
+}

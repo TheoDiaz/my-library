@@ -28,6 +28,117 @@ class ApiDocController extends AbstractController
                 'description' => 'API pour gérer une bibliothèque personnelle',
             ],
             'paths' => [
+                '/api/register' => [
+                    'post' => [
+                        'summary' => 'Inscription d\'un nouvel utilisateur',
+                        'requestBody' => [
+                            'required' => true,
+                            'content' => [
+                                'application/json' => [
+                                    'schema' => [
+                                        'type' => 'object',
+                                        'required' => ['email', 'password'],
+                                        'properties' => [
+                                            'email' => [
+                                                'type' => 'string',
+                                                'format' => 'email',
+                                                'description' => 'Email de l\'utilisateur'
+                                            ],
+                                            'password' => [
+                                                'type' => 'string',
+                                                'format' => 'password',
+                                                'description' => 'Mot de passe de l\'utilisateur'
+                                            ]
+                                        ]
+                                    ]
+                                ]
+                            ]
+                        ],
+                        'responses' => [
+                            '201' => [
+                                'description' => 'Utilisateur créé avec succès',
+                                'content' => [
+                                    'application/json' => [
+                                        'schema' => [
+                                            'type' => 'object',
+                                            'properties' => [
+                                                'message' => ['type' => 'string'],
+                                                'user' => [
+                                                    'type' => 'object',
+                                                    'properties' => [
+                                                        'id' => ['type' => 'integer'],
+                                                        'email' => ['type' => 'string']
+                                                    ]
+                                                ]
+                                            ]
+                                        ]
+                                    ]
+                                ]
+                            ],
+                            '400' => [
+                                'description' => 'Erreur de validation',
+                                'content' => [
+                                    'application/json' => [
+                                        'schema' => [
+                                            'type' => 'object',
+                                            'properties' => [
+                                                'message' => ['type' => 'string'],
+                                                'errors' => [
+                                                    'type' => 'array',
+                                                    'items' => ['type' => 'string']
+                                                ]
+                                            ]
+                                        ]
+                                    ]
+                                ]
+                            ]
+                        ]
+                    ]
+                ],
+                '/api/login_check' => [
+                    'post' => [
+                        'summary' => 'Connexion utilisateur',
+                        'requestBody' => [
+                            'required' => true,
+                            'content' => [
+                                'application/json' => [
+                                    'schema' => [
+                                        'type' => 'object',
+                                        'required' => ['email', 'password'],
+                                        'properties' => [
+                                            'email' => [
+                                                'type' => 'string',
+                                                'format' => 'email'
+                                            ],
+                                            'password' => [
+                                                'type' => 'string',
+                                                'format' => 'password'
+                                            ]
+                                        ]
+                                    ]
+                                ]
+                            ]
+                        ],
+                        'responses' => [
+                            '200' => [
+                                'description' => 'Connexion réussie',
+                                'content' => [
+                                    'application/json' => [
+                                        'schema' => [
+                                            'type' => 'object',
+                                            'properties' => [
+                                                'token' => ['type' => 'string']
+                                            ]
+                                        ]
+                                    ]
+                                ]
+                            ],
+                            '401' => [
+                                'description' => 'Identifiants invalides'
+                            ]
+                        ]
+                    ]
+                ],
                 '/api/openlibrary/search' => [
                     'get' => [
                         'summary' => 'Recherche des livres sur Open Library',
@@ -144,6 +255,7 @@ class ApiDocController extends AbstractController
                 '/api/books' => [
                     'get' => [
                         'summary' => 'Récupère la liste des livres de la bibliothèque',
+                        'security' => [['bearerAuth' => []]],
                         'responses' => [
                             '200' => [
                                 'description' => 'Liste des livres récupérée avec succès',
@@ -152,6 +264,7 @@ class ApiDocController extends AbstractController
                     ],
                     'post' => [
                         'summary' => 'Ajoute un nouveau livre à la bibliothèque',
+                        'security' => [['bearerAuth' => []]],
                         'responses' => [
                             '201' => [
                                 'description' => 'Livre ajouté avec succès',
@@ -162,6 +275,7 @@ class ApiDocController extends AbstractController
                 '/api/books/{id}' => [
                     'get' => [
                         'summary' => 'Récupère les détails d\'un livre de la bibliothèque',
+                        'security' => [['bearerAuth' => []]],
                         'parameters' => [
                             [
                                 'name' => 'id',
@@ -184,6 +298,7 @@ class ApiDocController extends AbstractController
                     ],
                     'delete' => [
                         'summary' => 'Supprime un livre de la bibliothèque',
+                        'security' => [['bearerAuth' => []]],
                         'parameters' => [
                             [
                                 'name' => 'id',
@@ -206,6 +321,15 @@ class ApiDocController extends AbstractController
                     ]
                 ]
             ],
+            'components' => [
+                'securitySchemes' => [
+                    'bearerAuth' => [
+                        'type' => 'http',
+                        'scheme' => 'bearer',
+                        'bearerFormat' => 'JWT'
+                    ]
+                ]
+            ]
         ];
 
         return $this->json($docs);

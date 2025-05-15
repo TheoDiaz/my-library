@@ -1,0 +1,33 @@
+ion-searchbar {
+  --background: var(--ion-color-light);
+  --border-radius: var(--app-border-radius);
+  --box-shadow: none;
+  margin-bottom: 1rem;
+}
+
+ion-thumbnail {
+  --size: 80px;
+  margin-right: 1rem;
+  
+  img {
+    border-radius: 4px;
+    object-fit: cover;
+  }
+}
+
+ion-item {
+  --padding-start: 0;
+  --inner-padding-end: 0;
+  margin-bottom: 0.5rem;
+  
+  h2 {
+    font-weight: 500;
+    margin-bottom: 0.25rem;
+  }
+  
+  p {
+    color: var(--ion-color-medium);
+    font-size: 0.9rem;
+    margin: 0;
+  }
+} 

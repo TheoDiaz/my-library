@@ -1,0 +1,52 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Connexion</ion-title>
+  </ion-toolbar>
+</ion-header>
+<ion-content class="ion-padding" [fullscreen]="true">
+  <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" autocomplete="off">
+    <ion-item lines="none" class="custom-item">
+      <ion-label position="stacked">Email</ion-label>
+      <ion-input
+        formControlName="email"
+        type="email"
+        inputmode="email"
+        placeholder="Email"
+        [class.invalid]="loginForm.get('email')?.invalid && loginForm.get('email')?.touched"
+        autocapitalize="off"
+        autocomplete="email"
+      ></ion-input>
+    </ion-item>
+    <ion-item lines="none" class="custom-item">
+      <ion-label position="stacked">Password</ion-label>
+      <ion-input
+        formControlName="password"
+        [type]="showPassword ? 'text' : 'password'"
+        placeholder="Password"
+        [class.invalid]="loginForm.get('password')?.invalid && loginForm.get('password')?.touched"
+        autocomplete="current-password"
+      ></ion-input>
+      <ion-button fill="clear" size="small" slot="end" type="button" (click)="toggleShowPassword()">
+        {{ showPassword ? 'Hide' : 'Show' }}
+      </ion-button>
+    </ion-item>
+
+    <ion-text color="danger" *ngIf="error" class="ion-margin-bottom ion-text-center">
+      {{ error }}
+    </ion-text>
+
+    <ion-button
+      expand="block"
+      shape="round"
+      type="submit"
+      [disabled]="loginForm.invalid || loading"
+      class="ion-margin-vertical"
+    >
+      Log In
+    </ion-button>
+
+    <ion-text color="medium" class="ion-text-center ion-margin-top" style="display: block;">
+      <a href="#" style="text-decoration: underline;">Forgot your password?</a>
+    </ion-text>
+  </form>
+</ion-content> 

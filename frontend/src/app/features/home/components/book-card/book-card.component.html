@@ -1,0 +1,12 @@
+<ion-card class="book-card" tabindex="0" [attr.aria-label]="'Livre ' + book.title">
+  <div class="cover" *ngIf="book.cover; else noCover">
+    <img [src]="book.cover" [alt]="book.title" />
+  </div>
+  <ng-template #noCover>
+    <div class="cover placeholder"></div>
+  </ng-template>
+  <ion-card-content>
+    <div class="title">{{ book.title }}</div>
+    <div class="author">{{ book.author }}</div>
+  </ion-card-content>
+</ion-card> 

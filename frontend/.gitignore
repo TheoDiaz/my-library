@@ -1,0 +1,123 @@
+# Temporary and backup files
+*~
+*.sw[mnpcod]
+.tmp
+*.tmp
+*.tmp.*
+*.bak
+*.orig
+*.rej
+UserInterfaceState.xcuserstate
+$RECYCLE.BIN/
+
+# Logs
+*.log
+log.txt
+npm-debug.log
+yarn-error.log
+libpeerconnection.log
+testem.log
+
+# Ionic and Capacitor
+/.ionic
+/www
+/platforms
+/plugins
+.capacitor/
+capacitor.config.json
+capacitor.config.ts
+resources/android/
+resources/ios/
+*.apk
+*.aab
+*.ipa
+android/
+ios/
+ionic.config.json
+
+# Compiled output
+/dist
+/tmp
+/out-tsc
+/bazel-out
+/.sourcemaps
+/.versions
+/coverage
+*.js.map
+*.tsbuildinfo
+
+# Node
+/node_modules
+package-lock.json
+yarn.lock
+
+# Angular
+/.angular
+/.angular/cache
+.ngcc_lock_file
+coverage/
+compodoc/
+
+# IDEs and editors
+.idea/
+.project
+.classpath
+.c9/
+*.launch
+.settings/
+*.sublime-project
+*.sublime-workspace
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+.history/*
+
+# Tests
+/e2e/*.js
+/e2e/*.map
+test-results/
+playwright-report/
+playwright/.cache/
+
+# Environment variables
+.env
+.env.*
+!.env.example
+config.xml
+
+# Sass and styling
+.sass-cache/
+
+# Nx (if used)
+/.nx
+/.nx/cache
+
+# Miscellaneous
+/connect.lock
+/typings
+*.cache
+.eslintcache
+.prettierrc.cache
+docs/_build/
+
+# System files
+.DS_Store
+Thumbs.db
+
+# Deployment and CI/CD
+.firebase/
+functions/node_modules/
+functions/package-lock.json
+.nginx
+Dockerfile
+docker-compose.yml
+.github/
+.gitlab-ci.yml
+.bitbucket-pipelines.yml
+
+# Bundle and minified files
+*.bundle.js
+*.min.js
+*.min.css

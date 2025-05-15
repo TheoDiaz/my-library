@@ -1,0 +1,19 @@
+.home-content {
+  background: var(--app-background);
+  color: var(--app-text-color);
+  padding: var(--app-padding);
+}
+
+.section {
+  margin-bottom: 2rem;
+  h2 {
+    font-size: 1.2rem;
+    font-weight: 600;
+    margin-bottom: 1rem;
+  }
+  .book-list {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+  }
+} 

@@ -1,0 +1,63 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Inscription</ion-title>
+    <ion-button fill="clear" slot="end" routerLink="/login">Login</ion-button>
+  </ion-toolbar>
+</ion-header>
+<ion-content class="ion-padding" [fullscreen]="true">
+  <form [formGroup]="registerForm" (ngSubmit)="onSubmit()" autocomplete="off">
+    <ion-item lines="none" class="custom-item">
+      <ion-label position="stacked">Name</ion-label>
+      <ion-input
+        formControlName="username"
+        type="text"
+        placeholder="Name"
+        [class.invalid]="registerForm.get('username')?.invalid && registerForm.get('username')?.touched"
+        autocapitalize="words"
+      ></ion-input>
+    </ion-item>
+    <ion-item lines="none" class="custom-item">
+      <ion-label position="stacked">Email</ion-label>
+      <ion-input
+        formControlName="email"
+        type="email"
+        inputmode="email"
+        placeholder="Email"
+        [class.invalid]="registerForm.get('email')?.invalid && registerForm.get('email')?.touched"
+        autocapitalize="off"
+        autocomplete="email"
+      ></ion-input>
+    </ion-item>
+    <ion-item lines="none" class="custom-item">
+      <ion-label position="stacked">Password</ion-label>
+      <ion-input
+        formControlName="password"
+        [type]="showPassword ? 'text' : 'password'"
+        placeholder="Password"
+        [class.invalid]="registerForm.get('password')?.invalid && registerForm.get('password')?.touched"
+        autocomplete="new-password"
+      ></ion-input>
+      <ion-button fill="clear" size="small" slot="end" type="button" (click)="toggleShowPassword()">
+        {{ showPassword ? 'Hide' : 'Show' }}
+      </ion-button>
+    </ion-item>
+    <ion-item lines="none" class="custom-item">
+      <ion-checkbox formControlName="newsletter" slot="start"></ion-checkbox>
+      <ion-label>I would like to receive your newsletter and other promotional information.</ion-label>
+    </ion-item>
+
+    <ion-text color="danger" *ngIf="error" class="ion-margin-bottom ion-text-center">
+      {{ error }}
+    </ion-text>
+
+    <ion-button
+      expand="block"
+      shape="round"
+      type="submit"
+      [disabled]="registerForm.invalid || loading"
+      class="ion-margin-vertical"
+    >
+      Sign Up
+    </ion-button>
+  </form>
+</ion-content> 

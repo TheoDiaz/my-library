@@ -1,0 +1,22 @@
+<ion-searchbar
+  [(ngModel)]="searchTerm"
+  (ionInput)="onInput($event)"
+  placeholder="Rechercher un livre...">
+</ion-searchbar>
+
+<ion-list *ngIf="searchTerm && (results.length > 0 || loading)">
+  <ion-item *ngIf="loading">
+    <ion-spinner slot="start"></ion-spinner>
+    <ion-label>Recherche en cours...</ion-label>
+  </ion-item>
+  <ion-item *ngFor="let book of results" (click)="selectBook(book)">
+    <ion-label>
+      <strong>{{ book.title }}</strong><br>
+      <span *ngIf="book.author">{{ book.author }}</span>
+      <span *ngIf="book.year">({{ book.year }})</span>
+    </ion-label>
+  </ion-item>
+  <ion-item *ngIf="!loading && results.length === 0">
+    <ion-text color="medium">Aucun résultat</ion-text>
+  </ion-item>
+</ion-list> 

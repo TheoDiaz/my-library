@@ -1,0 +1,27 @@
+ion-searchbar {
+  --background: var(--ion-color-light);
+  --border-radius: var(--app-border-radius);
+  --box-shadow: none;
+  margin-bottom: 1.5rem;
+}
+
+ion-list {
+  position: absolute;
+  width: 100%;
+  z-index: 10;
+  background: var(--ion-background-color, #222b3a);
+  border-radius: 0 0 12px 12px;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.15);
+  max-height: 300px;
+  overflow-y: auto;
+  margin-top: 56px;
+}
+
+ion-item {
+  --background: transparent;
+  cursor: pointer;
+}
+
+ion-item:hover {
+  background: var(--ion-color-primary-shade, #2a3a5a);
+} 

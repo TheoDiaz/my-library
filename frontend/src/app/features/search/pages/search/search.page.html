@@ -1,0 +1,42 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Recherche de livres</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <!-- TEST MINIMAL : searchbar native -->
+  <ion-searchbar></ion-searchbar>
+
+  <app-home-search-bar (bookSelected)="onBookSelected($event)"></app-home-search-bar>
+
+  <div *ngIf="loading" class="ion-text-center ion-padding">
+    <ion-spinner></ion-spinner>
+    <p>Recherche en cours...</p>
+  </div>
+
+  <div *ngIf="error" class="ion-text-center ion-padding">
+    <ion-text color="danger">
+      <p>{{ error }}</p>
+    </ion-text>
+  </div>
+
+  <ion-list *ngIf="!loading && books.length > 0">
+    <ion-item *ngFor="let book of books" [routerLink]="['/search/details', book.id]">
+      <ion-thumbnail slot="start" *ngIf="book.cover">
+        <img [src]="book.cover" [alt]="book.title">
+      </ion-thumbnail>
+      <ion-label>
+        <h2>{{ book.title }}</h2>
+        <p>{{ book.author }}</p>
+        <p *ngIf="book.publishYear">Publié en {{ book.publishYear }}</p>
+      </ion-label>
+    </ion-item>
+  </ion-list>
+
+  <div *ngIf="!loading && books.length === 0 && searchControl.value" class="ion-text-center ion-padding">
+    <ion-text color="medium">
+      <p>Aucun résultat trouvé</p>
+    </ion-text>
+  </div>
+</ion-content> 

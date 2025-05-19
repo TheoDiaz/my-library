@@ -2,14 +2,22 @@ export interface Book {
   id: string;
   title: string;
   author: string;
-  cover?: string;
-  isbn?: string;
-  publishYear?: number;
-  description?: string;
-  publisher?: string;
-  language?: string;
-  subjects?: string[];
-  pages?: number;
+  description: string;
+  cover: string | null;
+  first_publish_year: number | null;
+  edition_count: number;
+  publisher: string;
+  pageCount: number | null;
+  language: string;
+  categories: string[];
+  isbn: string | null;
+  publishedDate?: string;
+  previewLink?: string;
+  infoLink?: string;
+  industryIdentifiers?: Array<{
+    type: string;
+    identifier: string;
+  }>;
 }
 
 export interface BookSearchResult {

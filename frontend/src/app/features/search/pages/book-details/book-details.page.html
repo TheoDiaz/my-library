@@ -1,86 +1,183 @@
 <ion-header>
-  <ion-toolbar>
+  <ion-toolbar color="dark">
     <ion-buttons slot="start">
-      <ion-back-button defaultHref="/search"></ion-back-button>
+      <ion-back-button defaultHref="/tabs/home" text="Retour"></ion-back-button>
     </ion-buttons>
-    <ion-title>Détails du livre</ion-title>
+    <ion-title>{{ book?.title || 'FicheLivre' }}</ion-title>
   </ion-toolbar>
 </ion-header>
 
-<ion-content class="ion-padding">
-  <div *ngIf="loading" class="ion-text-center ion-padding">
-    <ion-spinner></ion-spinner>
-    <p>Chargement en cours...</p>
+<ion-content class="fiche-livre-bg">
+  <div class="fiche-livre-container">
+    <div class="fiche-livre-header">
+      <div class="fiche-livre-info">
+        <h1 class="fiche-livre-title">{{ book?.title || 'NomDuLivre' }}</h1>
+        <div class="fiche-livre-author">{{ book?.author || 'Auteur' }}</div>
+        <div class="fiche-livre-year">{{ book?.first_publish_year || 'Sortie' }}</div>
+      </div>
+      <div class="fiche-livre-cover-block">
+        <img *ngIf="book?.cover" [src]="book?.cover" [alt]="book?.title" class="fiche-livre-cover" />
+        <div *ngIf="!book?.cover" class="fiche-livre-cover fiche-livre-cover-placeholder"></div>
+      </div>
+    </div>
+
+    <div class="fiche-livre-section">
+      <div class="fiche-livre-section-title">Résumé</div>
+      <div class="fiche-livre-description" [innerHTML]="safeDescription"></div>
+    </div>
+
+    <div *ngIf="book?.categories?.length" class="fiche-livre-section">
+      <div class="fiche-livre-section-title">Catégories</div>
+      <div class="fiche-livre-categories">
+        <span *ngFor="let category of book?.categories" class="fiche-livre-category-chip">{{ category }}</span>
+      </div>
+    </div>
+
+    <div class="fiche-livre-section">
+      <div class="fiche-livre-section-title">Notes</div>
+      <ion-textarea placeholder="Notes..." class="fiche-livre-notes"></ion-textarea>
+    </div>
+
+    <div class="fiche-livre-section">
+      <div class="fiche-livre-section-title">Commentaires</div>
+      <ion-textarea placeholder="Commentaires..." class="fiche-livre-comments"></ion-textarea>
+    </div>
   </div>
 
-  <div *ngIf="error" class="ion-text-center ion-padding">
-    <ion-text color="danger">
-      <p>{{ error }}</p>
-    </ion-text>
-  </div>
+  <ion-fab vertical="bottom" horizontal="end" slot="fixed">
+    <ion-fab-button color="light" (click)="addToLibrary()" [disabled]="addingToLibrary">
+      <ion-icon [name]="addingToLibrary ? 'hourglass-outline' : 'add'"></ion-icon>
+    </ion-fab-button>
+  </ion-fab>
+</ion-content>
 
-  <ion-card *ngIf="book && !loading">
-    <img *ngIf="book.cover" [src]="book.cover" [alt]="book.title">
-    
-    <ion-card-header>
-      <ion-card-title>{{ book.title }}</ion-card-title>
-      <ion-card-subtitle>{{ book.author }}</ion-card-subtitle>
-    </ion-card-header>
+<style>
+.fiche-livre-bg {
+  --background: #183153;
+  background: #183153;
+  color: #fff;
+}
 
-    <ion-card-content>
-      <ion-list lines="none">
-        <ion-item *ngIf="book.publishYear">
-          <ion-label>
-            <h3>Année de publication</h3>
-            <p>{{ book.publishYear }}</p>
-          </ion-label>
-        </ion-item>
+.fiche-livre-container {
+  max-width: 500px;
+  margin: 0 auto;
+  padding: 1.5rem 1rem 5rem 1rem;
+}
 
-        <ion-item *ngIf="book.publisher">
-          <ion-label>
-            <h3>Éditeur</h3>
-            <p>{{ book.publisher }}</p>
-          </ion-label>
-        </ion-item>
+.fiche-livre-header {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  justify-content: space-between;
+  margin-bottom: 1.5rem;
+}
 
-        <ion-item *ngIf="book.language">
-          <ion-label>
-            <h3>Langue</h3>
-            <p>{{ book.language }}</p>
-          </ion-label>
-        </ion-item>
+.fiche-livre-info {
+  flex: 1;
+}
 
-        <ion-item *ngIf="book.pages">
-          <ion-label>
-            <h3>Nombre de pages</h3>
-            <p>{{ book.pages }}</p>
-          </ion-label>
-        </ion-item>
+.fiche-livre-title {
+  font-size: 2rem;
+  font-weight: bold;
+  margin: 0 0 0.5rem 0;
+  color: #fff;
+  text-align: left;
+}
 
-        <ion-item *ngIf="book.isbn">
-          <ion-label>
-            <h3>ISBN</h3>
-            <p>{{ book.isbn }}</p>
-          </ion-label>
-        </ion-item>
-      </ion-list>
+.fiche-livre-author,
+.fiche-livre-year {
+  font-size: 1.1rem;
+  color: #e0e6f7;
+  margin-bottom: 0.3rem;
+}
 
-      <div *ngIf="book.description" class="ion-padding-top">
-        <h3>Description</h3>
-        <p>{{ book.description }}</p>
-      </div>
+.fiche-livre-cover-block {
+  flex: 0 0 110px;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+}
 
-      <div *ngIf="book.subjects && book.subjects.length > 0" class="ion-padding-top">
-        <h3>Sujets</h3>
-        <ion-chip *ngFor="let subject of book.subjects">
-          {{ subject }}
-        </ion-chip>
-      </div>
-    </ion-card-content>
-  </ion-card>
+.fiche-livre-cover {
+  width: 100px;
+  height: 140px;
+  object-fit: cover;
+  border-radius: 8px;
+  background: #fff;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+}
 
-  <ion-button expand="block" (click)="addToLibrary()" *ngIf="book && !loading">
-    <ion-icon name="add-circle-outline" slot="start"></ion-icon>
-    Ajouter à ma bibliothèque
-  </ion-button>
-</ion-content> 
+.fiche-livre-cover-placeholder {
+  background: #fff;
+  width: 100px;
+  height: 140px;
+  border-radius: 8px;
+}
+
+.fiche-livre-section {
+  margin-bottom: 1.5rem;
+}
+
+.fiche-livre-section-title {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #e0e6f7;
+  margin-bottom: 0.5rem;
+}
+
+.fiche-livre-description {
+  color: #fff;
+  font-size: 1rem;
+  line-height: 1.6;
+  background: transparent;
+  border-radius: 6px;
+  padding: 0.5rem 0;
+}
+
+.fiche-livre-notes,
+.fiche-livre-comments {
+  width: 100%;
+  min-height: 60px;
+  background: #22396a;
+  color: #fff;
+  border-radius: 6px;
+  padding: 0.5rem;
+  font-size: 1rem;
+  margin-bottom: 0.5rem;
+}
+
+ion-fab-button[color="light"] {
+  --background: #f5f5f5;
+  --color: #183153;
+}
+
+@media (max-width: 600px) {
+  .fiche-livre-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .fiche-livre-cover-block {
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+  }
+}
+
+.fiche-livre-categories {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.fiche-livre-category-chip {
+  display: inline-block;
+  background: #e0e6f7;
+  color: #183153;
+  border-radius: 16px;
+  padding: 0.25rem 0.9rem;
+  font-size: 0.95rem;
+  font-weight: 500;
+  box-shadow: 0 1px 3px rgba(24,49,83,0.07);
+  letter-spacing: 0.01em;
+}
+</style> 

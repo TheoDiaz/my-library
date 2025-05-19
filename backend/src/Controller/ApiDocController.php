@@ -139,9 +139,9 @@ class ApiDocController extends AbstractController
                         ]
                     ]
                 ],
-                '/api/openlibrary/search' => [
+                '/api/googlebooks/search' => [
                     'get' => [
-                        'summary' => 'Recherche des livres sur Open Library',
+                        'summary' => 'Recherche de livres via Google Books',
                         'parameters' => [
                             [
                                 'name' => 'q',
@@ -151,11 +151,29 @@ class ApiDocController extends AbstractController
                                     'type' => 'string'
                                 ],
                                 'description' => 'Terme de recherche'
+                            ],
+                            [
+                                'name' => 'lang',
+                                'in' => 'query',
+                                'required' => false,
+                                'schema' => [
+                                    'type' => 'string'
+                                ],
+                                'description' => 'Code de langue (ex: fr)'
+                            ],
+                            [
+                                'name' => 'maxResults',
+                                'in' => 'query',
+                                'required' => false,
+                                'schema' => [
+                                    'type' => 'integer'
+                                ],
+                                'description' => 'Nombre maximum de résultats (défaut: 20)'
                             ]
                         ],
                         'responses' => [
                             '200' => [
-                                'description' => 'Résultats de la recherche',
+                                'description' => 'Liste des livres correspondant à la recherche',
                                 'content' => [
                                     'application/json' => [
                                         'schema' => [
@@ -167,7 +185,9 @@ class ApiDocController extends AbstractController
                                                     'author_name' => ['type' => 'string'],
                                                     'first_publish_year' => ['type' => 'integer'],
                                                     'cover_i' => ['type' => 'integer'],
-                                                    'isbn' => ['type' => 'string']
+                                                    'isbn' => ['type' => 'string'],
+                                                    'edition_key' => ['type' => 'string'],
+                                                    'key' => ['type' => 'string']
                                                 ]
                                             ]
                                         ]
@@ -175,14 +195,14 @@ class ApiDocController extends AbstractController
                                 ]
                             ],
                             '400' => [
-                                'description' => 'Paramètre de recherche manquant'
+                                'description' => 'Paramètres de recherche manquants'
                             ]
                         ]
                     ]
                 ],
-                '/api/openlibrary/details/{id}' => [
+                '/api/googlebooks/details/{id}' => [
                     'get' => [
-                        'summary' => 'Récupère les détails d\'un livre par son ID Open Library',
+                        'summary' => 'Récupère les détails d\'un livre via son ID Google Books',
                         'parameters' => [
                             [
                                 'name' => 'id',
@@ -191,57 +211,16 @@ class ApiDocController extends AbstractController
                                 'schema' => [
                                     'type' => 'string'
                                 ],
-                                'description' => 'ID du livre sur Open Library'
+                                'description' => 'ID du livre Google Books'
                             ]
                         ],
                         'responses' => [
                             '200' => [
-                                'description' => 'Détails du livre',
+                                'description' => 'Détails complets du livre',
                                 'content' => [
                                     'application/json' => [
                                         'schema' => [
                                             'type' => 'object'
-                                        ]
-                                    ]
-                                ]
-                            ],
-                            '404' => [
-                                'description' => 'Livre non trouvé'
-                            ]
-                        ]
-                    ]
-                ],
-                '/api/openlibrary/isbn/{isbn}' => [
-                    'get' => [
-                        'summary' => 'Recherche un livre par son ISBN',
-                        'parameters' => [
-                            [
-                                'name' => 'isbn',
-                                'in' => 'path',
-                                'required' => true,
-                                'schema' => [
-                                    'type' => 'string'
-                                ],
-                                'description' => 'ISBN du livre'
-                            ]
-                        ],
-                        'responses' => [
-                            '200' => [
-                                'description' => 'Détails du livre',
-                                'content' => [
-                                    'application/json' => [
-                                        'schema' => [
-                                            'type' => 'array',
-                                            'items' => [
-                                                'type' => 'object',
-                                                'properties' => [
-                                                    'title' => ['type' => 'string'],
-                                                    'author_name' => ['type' => 'string'],
-                                                    'first_publish_year' => ['type' => 'integer'],
-                                                    'cover_i' => ['type' => 'integer'],
-                                                    'isbn' => ['type' => 'string']
-                                                ]
-                                            ]
                                         ]
                                     ]
                                 ]
@@ -333,5 +312,29 @@ class ApiDocController extends AbstractController
         ];
 
         return $this->json($docs);
+    }
+
+    private function getApiEndpoints(): array
+    {
+        return [
+            '/api/googlebooks/search' => [
+                'method' => 'GET',
+                'description' => 'Recherche de livres via Google Books',
+                'parameters' => [
+                    'q' => 'Terme de recherche',
+                    'lang' => 'Code de langue (ex: fr)',
+                    'maxResults' => 'Nombre maximum de résultats (défaut: 20)'
+                ],
+                'response' => 'Liste des livres correspondant à la recherche'
+            ],
+            '/api/googlebooks/details/{id}' => [
+                'method' => 'GET',
+                'description' => 'Récupère les détails d\'un livre via son ID Google Books',
+                'parameters' => [
+                    'id' => 'ID du livre Google Books'
+                ],
+                'response' => 'Détails complets du livre'
+            ]
+        ];
     }
 } 

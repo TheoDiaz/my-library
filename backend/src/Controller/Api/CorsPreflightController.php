@@ -24,4 +24,10 @@ class CorsPreflightController
     {
         return new Response();
     }
+
+    #[Route('/api/librarybooks', name: 'api_librarybooks_options', methods: ['OPTIONS'])]
+    public function libraryBooksOptions(): Response
+    {
+        return new Response();
+    }
 } 

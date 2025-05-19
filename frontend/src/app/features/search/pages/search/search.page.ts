@@ -3,12 +3,12 @@ import { CommonModule } from '@angular/common';
 import { IonicModule } from '@ionic/angular';
 import { FormsModule, ReactiveFormsModule, FormControl } from '@angular/forms';
 import { RouterModule, Router } from '@angular/router';
-import { debounceTime, distinctUntilChanged, switchMap, of } from 'rxjs';
-import { ApiService } from '../../../../core/services/api.service';
+import { debounceTime, distinctUntilChanged } from 'rxjs';
 import { Book } from '../../models/book.interface';
-import { HomeSearchBarComponent } from '../../../home/components/home-search-bar/home-search-bar.component';
+import { LibraryService } from '../../../../core/services/library.service';
 import { RouterLink } from '@angular/router';
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-search',
@@ -21,69 +21,80 @@ import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
     IonicModule,
     FormsModule,
     ReactiveFormsModule,
-    HomeSearchBarComponent,
     RouterLink
   ]
 })
 export class SearchPage implements OnInit {
   searchControl = new FormControl('');
-  books: Book[] = [];
+  libraryBooks: any[] = [];
+  filteredBooks: any[] = [];
   loading = false;
   error: string | null = null;
+  private apiUrl = environment.apiUrl;
 
-  constructor(private apiService: ApiService, private router: Router) {}
+  constructor(private libraryService: LibraryService, private router: Router) {}
 
   ngOnInit() {
+    this.fetchLibraryBooks();
     this.searchControl.valueChanges.pipe(
-      debounceTime(300),
-      distinctUntilChanged(),
-      switchMap((query) => {
-        query = query || '';
-        if (!query) {
-          this.books = [];
-          return of([]);
-        }
-        this.loading = true;
-        this.error = null;
-        return this.apiService.searchBooks(query);
-      })
-    ).subscribe({
-      next: (results: Book[]) => {
-        this.books = results;
+      debounceTime(200),
+      distinctUntilChanged()
+    ).subscribe(query => {
+      this.filterBooks(query || '');
+    });
+  }
+
+  fetchLibraryBooks() {
+    this.loading = true;
+    this.libraryService.getLibraryBooks().subscribe({
+      next: (results: any) => {
+        this.libraryBooks = results.member || [];
+        this.filteredBooks = this.libraryBooks;
         this.loading = false;
       },
       error: (err: any) => {
-        this.error = 'Une erreur est survenue lors de la recherche';
+        this.error = 'Erreur lors du chargement de la bibliothèque';
         this.loading = false;
-        console.error('Erreur de recherche:', err);
       }
     });
   }
 
-  onSearch(event: any) {
-    const query = event.target.value;
+  filterBooks(query: string) {
     if (!query) {
-      this.books = [];
+      this.filteredBooks = this.libraryBooks;
       return;
     }
-    this.loading = true;
-    this.error = null;
-    this.apiService.searchBooks(query).subscribe({
-      next: (results: Book[]) => {
-        this.books = results;
-        this.loading = false;
-      },
-      error: (err: any) => {
-        this.error = 'Une erreur est survenue lors de la recherche';
-        this.loading = false;
-        console.error('Erreur de recherche:', err);
-      }
+    const lower = query.toLowerCase();
+    this.filteredBooks = this.libraryBooks.filter(lb => {
+      const book = lb.book || lb; // selon la structure API Platform
+      return (
+        (book.title && book.title.toLowerCase().includes(lower)) ||
+        (book.author && book.author.toLowerCase().includes(lower))
+      );
     });
   }
 
-  onBookSelected(book: Book) {
+  getBookCover(lb: any): string | null {
+    const book = lb.book || lb;
+    const cover = book.coverId || book.cover;
+    if (!cover) return null;
+    return cover.startsWith('http') ? cover : `${this.apiUrl}${cover}`;
+  }
+
+  getBookTitle(lb: any): string {
+    const book = lb.book || lb;
+    return book.title || 'Nom';
+  }
+
+  getBookAuthor(lb: any): string {
+    const book = lb.book || lb;
+    return book.author || 'Auteur';
+  }
+
+  onBookSelected(lb: any) {
+    const book = lb.book || lb;
     if (book && book.id) {
-      this.router.navigate(['/search/details', book.id]);
+      this.router.navigate(['/tabs/livres/details', book.googleBooksId || book.id]);
     }
   }
 } 

@@ -32,4 +32,59 @@
     flex: 0 0 auto;
     width: 160px; // Ajustez cette valeur selon la taille souhaitée de vos cartes
   }
+}
+
+.book-section {
+  margin-bottom: 2rem;
+}
+
+.section-title {
+  font-size: 1.5rem;
+  margin-bottom: 1rem;
+  color: var(--ion-color-light);
+}
+
+.books-container {
+  display: flex;
+  overflow-x: auto;
+  gap: 1rem;
+  padding: 0.5rem 0;
+}
+
+.book-card {
+  flex: 0 0 auto;
+  width: 120px;
+  cursor: pointer;
+  transition: transform 0.2s ease;
+
+  &:hover {
+    transform: scale(1.05);
+  }
+}
+
+.book-cover {
+  width: 100%;
+  height: 180px;
+  object-fit: cover;
+  border-radius: 8px;
+  margin-bottom: 0.5rem;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+}
+
+.book-info {
+  padding: 0.5rem;
+}
+
+.book-title {
+  font-size: 0.9rem;
+  margin: 0;
+  color: var(--ion-color-light);
+  word-wrap: break-word;
+}
+
+.book-author {
+  font-size: 0.8rem;
+  color: var(--ion-color-medium);
+  margin: 0;
+  word-wrap: break-word;
 } 

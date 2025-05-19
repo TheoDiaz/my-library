@@ -5,7 +5,9 @@ import { IonicRouteStrategy, provideIonicAngular } from '@ionic/angular/standalo
 import { AppComponent } from './app/app.component';
 import { routes } from './app/app.routes';
 import { environment } from './environments/environment';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
+import { JwtInterceptor } from './app/core/interceptors/jwt.interceptor';
+import { AuthErrorInterceptor } from './app/core/interceptors/auth-error.interceptor';
 
 if (environment.production) {
   enableProdMode();
@@ -16,6 +18,8 @@ bootstrapApplication(AppComponent, {
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
     provideIonicAngular({ mode: 'md' }),
     provideRouter(routes, withPreloading(PreloadAllModules)),
-    importProvidersFrom(HttpClientModule)
+    importProvidersFrom(HttpClientModule),
+    { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },
+    { provide: HTTP_INTERCEPTORS, useClass: AuthErrorInterceptor, multi: true }
   ]
 });

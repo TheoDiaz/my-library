@@ -1,0 +1,29 @@
+<div class="best-sellers-mobile-only">
+  <div class="best-sellers-container-horizontal">
+    <!-- Loading state -->
+    <div *ngIf="loading" class="loading-container">
+      <ion-spinner name="crescent"></ion-spinner>
+      <p>Chargement des best-sellers...</p>
+    </div>
+
+    <!-- Error state -->
+    <div *ngIf="error" class="error-container">
+      <ion-icon name="alert-circle-outline"></ion-icon>
+      <p>{{ error }}</p>
+      <ion-button (click)="loadBestSellers()">Réessayer</ion-button>
+    </div>
+
+    <!-- Best sellers horizontal scroll -->
+    <div class="scroll-row" *ngIf="!loading && !error">
+      <div class="book-tile" *ngFor="let book of bestSellers" (click)="goToBookDetail(book.googleBooks?.id || book.nyt?.isbn)">
+        <img [src]="book.googleBooks?.cover || 'assets/default-cover.jpg'"
+             [alt]="book.googleBooks?.title || book.nyt?.title"
+             class="book-cover">
+        <div class="book-infos">
+          <div class="book-title">{{ book.googleBooks?.title || book.nyt?.title }}</div>
+          <div class="book-author">{{ book.googleBooks?.authors?.[0] || book.nyt?.author }}</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div> 

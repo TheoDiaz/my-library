@@ -9,6 +9,7 @@ use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Post;
 use ApiPlatform\Metadata\Delete;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: BookRepository::class)]
 #[ApiResource(
@@ -17,32 +18,45 @@ use ApiPlatform\Metadata\Delete;
         new GetCollection(),
         new Post(),
         new Delete()
-    ]
+    ],
+    normalizationContext: ['groups' => ['book:read']],
+    denormalizationContext: ['groups' => ['book:write']]
 )]
 class Book
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups(['book:read', 'libraryBook:read'])]
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups(['book:read', 'book:write', 'libraryBook:read'])]
     private ?string $title = null;
 
     #[ORM\Column(length: 255, nullable: true)]
+    #[Groups(['book:read', 'book:write', 'libraryBook:read'])]
     private ?string $author = null;
 
     #[ORM\Column(nullable: true)]
+    #[Groups(['book:read', 'book:write', 'libraryBook:read'])]
     private ?int $firstPublishYear = null;
 
     #[ORM\Column(length: 255, nullable: true)]
-    private ?string $coverId = null;
+    #[Groups(['book:read', 'book:write', 'libraryBook:read'])]
+    private ?string $cover = null;
 
     #[ORM\Column(length: 13, nullable: true)]
+    #[Groups(['book:read', 'book:write', 'libraryBook:read'])]
     private ?string $isbn = null;
+
+    #[ORM\Column(length: 255, unique: true)]
+    #[Groups(['book:read', 'book:write', 'libraryBook:read'])]
+    private ?string $googleBooksId = null;
 
     #[ORM\ManyToOne(inversedBy: 'books')]
     #[ORM\JoinColumn(nullable: false)]
+    #[Groups(['book:read'])]
     private ?User $owner = null;
 
     public function getId(): ?int
@@ -83,14 +97,14 @@ class Book
         return $this;
     }
 
-    public function getCoverId(): ?string
+    public function getCover(): ?string
     {
-        return $this->coverId;
+        return $this->cover;
     }
 
-    public function setCoverId(?string $coverId): static
+    public function setCover(?string $cover): static
     {
-        $this->coverId = $coverId;
+        $this->cover = $cover;
         return $this;
     }
 
@@ -102,6 +116,17 @@ class Book
     public function setIsbn(?string $isbn): static
     {
         $this->isbn = $isbn;
+        return $this;
+    }
+
+    public function getGoogleBooksId(): ?string
+    {
+        return $this->googleBooksId;
+    }
+
+    public function setGoogleBooksId(string $googleBooksId): static
+    {
+        $this->googleBooksId = $googleBooksId;
         return $this;
     }
 

@@ -1,0 +1,126 @@
+.best-sellers-container {
+  padding: 0;
+  background: transparent;
+}
+
+.loading-container, .error-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 32px;
+  text-align: center;
+  color: #fff;
+
+  ion-spinner {
+    margin-bottom: 16px;
+  }
+
+  ion-icon {
+    font-size: 48px;
+    color: var(--ion-color-danger);
+    margin-bottom: 16px;
+  }
+}
+
+.book-tile {
+  flex: 0 0 calc((100vw - 4rem) / 3); /* 3 items visibles, 2rem de gap total */
+  max-width: 260px;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  cursor: pointer;
+  min-height: 180px;
+  padding: 0;
+  background: transparent;
+  border-radius: 0;
+  box-shadow: none;
+  border: none;
+  transition: transform 0.1s;
+}
+
+.book-tile:hover {
+  transform: scale(1.03);
+}
+
+.book-cover {
+  width: 100%;
+  height: auto;
+  aspect-ratio: 3/4;
+  margin-bottom: 0.7rem;
+  display: block;
+  object-fit: cover;
+  border-radius: 0;
+  background: transparent;
+}
+
+.book-infos {
+  width: 100%;
+}
+
+.book-title {
+  font-size: 1.05rem;
+  font-weight: bold;
+  color: #fff;
+  margin-bottom: 0.2rem;
+  line-height: 1.2;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.book-author {
+  font-size: 0.92rem;
+  color: #7a869a;
+  font-weight: 400;
+}
+
+ion-grid, ion-row {
+  --ion-grid-padding: 0;
+  --ion-grid-column-padding: 8px;
+}
+
+.best-sellers-mobile-only {
+  display: block;
+
+  @media (min-width: 768px) {
+    display: none;
+  }
+}
+
+.best-sellers-container-horizontal {
+  padding: 0 0 8px 0;
+  background: transparent;
+}
+
+.scroll-row {
+  display: flex;
+  flex-direction: row;
+  overflow-x: auto;
+  gap: 2rem;
+  padding-bottom: 8px;
+  scrollbar-width: thin;
+  scrollbar-color: #23304a #1a2233;
+}
+
+.loading-container, .error-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 24px 0;
+  text-align: center;
+  color: #fff;
+
+  ion-spinner {
+    margin-bottom: 12px;
+  }
+
+  ion-icon {
+    font-size: 36px;
+    color: var(--ion-color-danger);
+    margin-bottom: 12px;
+  }
+} 

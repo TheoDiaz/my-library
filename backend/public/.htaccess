@@ -1,0 +1,5 @@
+# Autoriser l'accès aux images de couverture
+<FilesMatch "\.(jpg|jpeg|png|gif)$">
+    Allow from all
+    Require all granted
+</FilesMatch> 

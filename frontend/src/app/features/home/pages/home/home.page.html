@@ -1,42 +1,53 @@
 <ion-page>
-  <ion-header>
-    <ion-toolbar color="primary">
-      <ion-buttons slot="start">
-        <ion-back-button defaultHref="/"></ion-back-button>
-      </ion-buttons>
-      <ion-title>Accueil</ion-title>
-      <ion-buttons slot="end">
-        <ion-button routerLink="/profile">Mon Compte</ion-button>
-      </ion-buttons>
+  <ion-header [translucent]="true">
+    <ion-toolbar>
+      <ion-title>
+        Ma Bibliothèque
+      </ion-title>
     </ion-toolbar>
   </ion-header>
 
-  <ion-content [fullscreen]="true" class="home-content">
-    <app-home-search-bar></app-home-search-bar>
+  <ion-content [fullscreen]="true">
+    <ion-header collapse="condense">
+      <ion-toolbar>
+        <ion-title size="large">Ma Bibliothèque</ion-title>
+      </ion-toolbar>
+    </ion-header>
 
-    <ng-container *ngIf="!loading && !error">
-      <app-book-section
-        title="Dernières sorties"
-        [books]="latestBooks">
-      </app-book-section>
-
-      <app-book-section
-        title="Recommandations"
-        [books]="recommendedBooks">
-      </app-book-section>
-
-      <app-book-section
-        title="Deals"
-        [books]="dealsBooks">
-      </app-book-section>
-    </ng-container>
-
-    <div *ngIf="loading" class="ion-text-center ion-padding">
-      <ion-spinner></ion-spinner>
-      <p>Chargement...</p>
+    <div class="ion-padding">
+      <app-home-search-bar (bookSelected)="onBookSelect($event)"></app-home-search-bar>
     </div>
-    <div *ngIf="error" class="ion-text-center ion-padding">
-      <ion-text color="danger">{{ error }}</ion-text>
+
+    <div class="ion-padding">
+      <h2>Best-Sellers NYT</h2>
+      <app-best-sellers></app-best-sellers>
+    </div>
+
+    <div class="ion-padding">
+      <h2>À lire</h2>
+      <app-book-section
+        [title]="'À lire'"
+        [books]="toReadBooks"
+        (bookSelected)="onBookSelect($event)">
+      </app-book-section>
+    </div>
+
+    <div class="ion-padding">
+      <h2>En cours</h2>
+      <app-book-section
+        [title]="'En cours'"
+        [books]="readingBooks"
+        (bookSelected)="onBookSelect($event)">
+      </app-book-section>
+    </div>
+
+    <div class="ion-padding">
+      <h2>Terminés</h2>
+      <app-book-section
+        [title]="'Terminés'"
+        [books]="finishedBooks"
+        (bookSelected)="onBookSelect($event)">
+      </app-book-section>
     </div>
   </ion-content>
 </ion-page> 

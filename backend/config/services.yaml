@@ -22,3 +22,21 @@ services:
 
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones
+
+    App\ApiResource\LibraryBookCollectionDataProvider:
+        arguments:
+            $collectionProvider: '@api_platform.doctrine.orm.state.collection_provider'
+            $tokenStorage: '@security.token_storage'
+            $iriConverter: '@api_platform.iri_converter'
+            $logger: '@logger'
+        autowire: true
+        autoconfigure: true
+
+    App\Service\GoogleBooksService:
+        arguments:
+            $apiKey: '%env(GOOGLE_BOOKS_API_KEY)%'
+            $params: '@parameter_bag'
+
+    App\Service\NYTService:
+        arguments:
+            $apiKey: '%env(NYT_API_KEY)%'

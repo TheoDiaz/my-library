@@ -1,18 +1,18 @@
 <ion-header>
-  <ion-toolbar>
-    <ion-title>Recherche de livres</ion-title>
+  <ion-toolbar color="dark">
+    <ion-title>Ma Bibliothèque</ion-title>
   </ion-toolbar>
 </ion-header>
 
-<ion-content class="ion-padding">
-  <!-- TEST MINIMAL : searchbar native -->
-  <ion-searchbar></ion-searchbar>
-
-  <app-home-search-bar (bookSelected)="onBookSelected($event)"></app-home-search-bar>
+<ion-content class="ion-padding library-bg">
+  <ion-searchbar [formControl]="searchControl" placeholder="Rechercher"></ion-searchbar>
 
   <div *ngIf="loading" class="ion-text-center ion-padding">
+    <ion-skeleton-text animated style="width: 80%; height: 40px; margin: 10px auto;"></ion-skeleton-text>
+    <ion-skeleton-text animated style="width: 90%; height: 80px; margin: 10px auto;"></ion-skeleton-text>
+    <ion-skeleton-text animated style="width: 60%; height: 40px; margin: 10px auto;"></ion-skeleton-text>
     <ion-spinner></ion-spinner>
-    <p>Recherche en cours...</p>
+    <p>Chargement de la bibliothèque...</p>
   </div>
 
   <div *ngIf="error" class="ion-text-center ion-padding">
@@ -21,22 +21,137 @@
     </ion-text>
   </div>
 
-  <ion-list *ngIf="!loading && books.length > 0">
-    <ion-item *ngFor="let book of books" [routerLink]="['/search/details', book.id]">
-      <ion-thumbnail slot="start" *ngIf="book.cover">
-        <img [src]="book.cover" [alt]="book.title">
-      </ion-thumbnail>
-      <ion-label>
-        <h2>{{ book.title }}</h2>
-        <p>{{ book.author }}</p>
-        <p *ngIf="book.publishYear">Publié en {{ book.publishYear }}</p>
-      </ion-label>
-    </ion-item>
-  </ion-list>
-
-  <div *ngIf="!loading && books.length === 0 && searchControl.value" class="ion-text-center ion-padding">
+  <div *ngIf="!loading && filteredBooks.length === 0 && searchControl.value" class="ion-text-center ion-padding">
     <ion-text color="medium">
       <p>Aucun résultat trouvé</p>
     </ion-text>
   </div>
-</ion-content> 
+
+  <div *ngIf="!loading && filteredBooks.length > 0" class="books-grid">
+    <div class="book-card" *ngFor="let lb of filteredBooks" (click)="onBookSelected(lb)">
+      <div class="book-cover">
+        <img *ngIf="getBookCover(lb); else defaultCover" [src]="getBookCover(lb)" [alt]="getBookTitle(lb)">
+        <ng-template #defaultCover>
+          <div class="book-cover-placeholder"></div>
+        </ng-template>
+      </div>
+      <div class="book-info">
+        <div class="book-title">{{ getBookTitle(lb) }}</div>
+        <div class="book-author">{{ getBookAuthor(lb) }}</div>
+      </div>
+    </div>
+  </div>
+</ion-content>
+
+<style>
+.library-bg {
+  --background: #1a2942;
+  background: #1a2942;
+  color: #fff;
+  min-height: 100vh;
+}
+
+.books-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 2rem;
+  margin: 2rem 1.2rem 0 1.2rem;
+  padding-bottom: 5rem;
+}
+
+.book-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  cursor: pointer;
+  min-height: 150px;
+  box-shadow: none;
+  border: none;
+  transition: transform 0.1s;
+}
+
+.book-card:hover {
+  transform: scale(1.03);
+}
+
+.book-cover {
+  width: 100%;
+  height: auto;
+  aspect-ratio: 3/4;
+  margin-bottom: 0.7rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  overflow: hidden;
+}
+
+.book-cover img {
+  width: 100%;
+  height: auto;
+  aspect-ratio: 3/4;
+  object-fit: cover;
+  background: #f4f6fa00;
+  box-shadow: none;
+  display: block;
+}
+
+.book-cover-placeholder {
+  width: 100%;
+  aspect-ratio: 3/4;
+  background: #f4f6fa33;
+}
+
+.book-info {
+  width: 100%;
+}
+
+.book-title {
+  font-size: 1.05rem;
+  font-weight: bold;
+  color: #ffffff;
+  margin-bottom: 0.2rem;
+  line-height: 1.2;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.book-author {
+  font-size: 0.92rem;
+  color: #7a869a;
+  font-weight: 400;
+}
+
+ion-searchbar {
+  --background: #2d4060;
+  --color: #222b45;
+  --placeholder-color: #7a869a;
+  --icon-color: #7a869a;
+  --border-radius: 14px;
+  margin: 1.2rem 1.2rem 0.5rem 1.2rem;
+  box-shadow: none;
+  border: none;
+}
+
+@media (max-width: 480px) {
+  .books-grid {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1rem;
+    margin: 1rem 0.5rem 0 0.5rem;
+  }
+  .book-card {
+    min-height: 150px;
+  }
+  .book-title {
+    font-size: 0.95rem;
+  }
+  .book-author {
+    font-size: 0.8rem;
+  }
+  ion-searchbar {
+    margin: 1rem 0.5rem 0.5rem 0.5rem;
+  }
+}
+</style> 

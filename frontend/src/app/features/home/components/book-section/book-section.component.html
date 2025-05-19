@@ -1,6 +1,12 @@
-<div class="section">
-  <h2>{{ title }}</h2>
-  <div class="book-list horizontal-scroll">
-    <app-book-card *ngFor="let book of limitedBooks" [book]="book"></app-book-card>
+<div class="book-section">
+  <h2 class="section-title">{{ title }}</h2>
+  <div class="books-container">
+    <div *ngFor="let book of books" class="book-card" (click)="onBookClick(book)">
+      <img [src]="book.cover" [alt]="book.title" class="book-cover">
+      <div class="book-info">
+        <h3 class="book-title">{{ book.title }}</h3>
+        <p class="book-author">{{ book.author }}</p>
+      </div>
+    </div>
   </div>
 </div> 

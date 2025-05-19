@@ -17,6 +17,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
 use ApiPlatform\Metadata\ApiProperty;
 use ApiPlatform\Doctrine\Orm\Filter\SearchFilter;
 use ApiPlatform\Doctrine\Orm\Filter\OrderFilter;
+use App\ApiResource\LibraryBookCollectionDataProvider;
 
 #[ORM\Entity(repositoryClass: LibraryBookRepository::class)]
 #[ApiResource(
@@ -26,8 +27,10 @@ use ApiPlatform\Doctrine\Orm\Filter\OrderFilter;
             normalizationContext: ['groups' => ['libraryBook:read']]
         ),
         new GetCollection(
+            provider: LibraryBookCollectionDataProvider::class,
             description: 'Récupère la liste des livres de la bibliothèque',
-            normalizationContext: ['groups' => ['libraryBook:read']]
+            normalizationContext: ['groups' => ['libraryBook:read']],
+            security: 'is_granted("ROLE_USER")'
         ),
         new Post(
             description: 'Ajoute un nouveau livre à la bibliothèque',
@@ -63,7 +66,8 @@ class LibraryBook
 
     #[ORM\ManyToOne]
     #[ORM\JoinColumn(nullable: false)]
-    #[Groups(['libraryBook:read', 'libraryBook:write'])]
+    #[Groups(['libraryBook:read'])]
+    #[\Symfony\Component\Serializer\Annotation\MaxDepth(1)]
     #[ApiProperty(description: 'Le livre associé')]
     private ?Book $book = null;
 

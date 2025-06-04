@@ -8,7 +8,8 @@ export const environment = {
   storageKeys: {
     token: 'auth_token',
     theme: 'app_theme'
-  }
+  },
+  nytApiKey: 'YOUR_NYT_API_KEY' // À remplacer par la vraie clé API
 };
 
 /*

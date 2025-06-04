@@ -1,7 +1,7 @@
 import { Component, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { IonicModule } from '@ionic/angular';
-import { RouterModule } from '@angular/router';
+import { RouterModule, Router } from '@angular/router';
 import { HomeSearchBarComponent } from '../../components/home-search-bar/home-search-bar.component';
 import { BookSectionComponent } from '../../components/book-section/book-section.component';
 import { Book } from '../../../../features/search/models/book.interface';
@@ -28,8 +28,10 @@ export class HomePage {
   readingBooks: Book[] = [];
   finishedBooks: Book[] = [];
 
+  constructor(private router: Router) {}
+
   onBookSelect(book: Book): void {
-    // Navigation vers la page de détails du livre
-    console.log('Livre sélectionné:', book);
+    console.log('HomePage - Livre sélectionné:', book);
+    this.router.navigate(['/livres/details', book.id]);
   }
 } 

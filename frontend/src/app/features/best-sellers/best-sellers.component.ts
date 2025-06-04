@@ -52,6 +52,6 @@ export class BestSellersComponent implements OnInit {
       return;
     }
     console.log('[BestSellers] Navigation vers le livre:', id);
-    this.router.navigate(['/tabs/livres/details', id]);
+    this.router.navigate(['/livres/details', id]);
   }
 } 

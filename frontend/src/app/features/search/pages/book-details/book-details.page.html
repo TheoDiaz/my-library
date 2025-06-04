@@ -1,7 +1,7 @@
 <ion-header>
   <ion-toolbar color="dark">
     <ion-buttons slot="start">
-      <ion-back-button defaultHref="/tabs/home" text="Retour"></ion-back-button>
+      <ion-back-button (click)="handleBack()"></ion-back-button>
     </ion-buttons>
     <ion-title>{{ book?.title || 'FicheLivre' }}</ion-title>
   </ion-toolbar>
@@ -45,11 +45,69 @@
   </div>
 
   <ion-fab vertical="bottom" horizontal="end" slot="fixed">
-    <ion-fab-button color="light" (click)="addToLibrary()" [disabled]="addingToLibrary">
+    <ion-fab-button color="light" (click)="openBookActions($event)" [disabled]="addingToLibrary">
       <ion-icon [name]="addingToLibrary ? 'hourglass-outline' : 'add'"></ion-icon>
     </ion-fab-button>
   </ion-fab>
 </ion-content>
+
+<ion-popover [isOpen]="isPopoverOpen" (didDismiss)="isPopoverOpen = false">
+  <ng-template>
+    <ion-content class="ion-padding">
+      <ion-list>
+        <!-- Section Ajouter -->
+        <ion-item-divider>
+          <ion-label>Ajouter</ion-label>
+        </ion-item-divider>
+        
+        <ion-item button (click)="addToLibrary()">
+          <ion-icon name="library-outline" slot="start"></ion-icon>
+          <ion-label>À ma bibliothèque</ion-label>
+        </ion-item>
+        
+        <ion-item button (click)="addToWishlist()">
+          <ion-icon name="heart-outline" slot="start"></ion-icon>
+          <ion-label>À ma wishlist</ion-label>
+        </ion-item>
+
+        <!-- Section Lecture -->
+        <ion-item-divider>
+          <ion-label>Lecture</ion-label>
+        </ion-item-divider>
+        
+        <ion-item button (click)="updateReadingStatus('reading')">
+          <ion-icon name="book-outline" slot="start"></ion-icon>
+          <ion-label>En cours de lecture</ion-label>
+        </ion-item>
+        
+        <ion-item button (click)="updateReadingStatus('to_read')">
+          <ion-icon name="time-outline" slot="start"></ion-icon>
+          <ion-label>À lire</ion-label>
+        </ion-item>
+        
+        <ion-item button (click)="updateReadingStatus('read')">
+          <ion-icon name="checkmark-circle-outline" slot="start"></ion-icon>
+          <ion-label>Lu</ion-label>
+        </ion-item>
+
+        <!-- Section Supprimer -->
+        <ion-item-divider>
+          <ion-label>Supprimer</ion-label>
+        </ion-item-divider>
+        
+        <ion-item button (click)="removeFromLibrary()" color="danger">
+          <ion-icon name="trash-outline" slot="start"></ion-icon>
+          <ion-label>De ma bibliothèque</ion-label>
+        </ion-item>
+        
+        <ion-item button (click)="removeFromWishlist()" color="danger">
+          <ion-icon name="trash-outline" slot="start"></ion-icon>
+          <ion-label>De ma wishlist</ion-label>
+        </ion-item>
+      </ion-list>
+    </ion-content>
+  </ng-template>
+</ion-popover>
 
 <style>
 .fiche-livre-bg {

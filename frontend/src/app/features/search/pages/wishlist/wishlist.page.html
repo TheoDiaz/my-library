@@ -1,0 +1,31 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Ma Wishlist</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-searchbar [formControl]="searchControl" placeholder="Rechercher dans la wishlist"></ion-searchbar>
+
+  <ion-list *ngIf="!loading && filteredBooks.length">
+    <ion-item *ngFor="let book of filteredBooks" (click)="onBookSelected(book)">
+      <ion-thumbnail slot="start">
+        <img [src]="book.cover" *ngIf="book.cover; else noCover" />
+        <ng-template #noCover><div class="no-cover"></div></ng-template>
+      </ion-thumbnail>
+      <ion-label>
+        <h2>{{ book.title || 'Nom' }}</h2>
+        <p>{{ book.author || 'Auteur' }}</p>
+      </ion-label>
+    </ion-item>
+  </ion-list>
+
+  <ion-list *ngIf="!loading && !filteredBooks.length">
+    <ion-item>
+      <ion-label>Aucun livre dans votre wishlist</ion-label>
+    </ion-item>
+  </ion-list>
+
+  <ion-spinner *ngIf="loading"></ion-spinner>
+  <ion-text color="danger" *ngIf="error">{{ error }}</ion-text>
+</ion-content> 

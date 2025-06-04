@@ -27,31 +27,31 @@ class Book
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    #[Groups(['book:read', 'libraryBook:read'])]
+    #[Groups(['book:read', 'libraryBook:read', 'wishlist:read'])]
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(['book:read', 'book:write', 'libraryBook:read'])]
+    #[Groups(['book:read', 'book:write', 'libraryBook:read', 'wishlist:read'])]
     private ?string $title = null;
 
     #[ORM\Column(length: 255, nullable: true)]
-    #[Groups(['book:read', 'book:write', 'libraryBook:read'])]
+    #[Groups(['book:read', 'book:write', 'libraryBook:read', 'wishlist:read'])]
     private ?string $author = null;
 
     #[ORM\Column(nullable: true)]
-    #[Groups(['book:read', 'book:write', 'libraryBook:read'])]
+    #[Groups(['book:read', 'book:write', 'libraryBook:read', 'wishlist:read'])]
     private ?int $firstPublishYear = null;
 
     #[ORM\Column(length: 255, nullable: true)]
-    #[Groups(['book:read', 'book:write', 'libraryBook:read'])]
+    #[Groups(['book:read', 'book:write', 'libraryBook:read', 'wishlist:read'])]
     private ?string $cover = null;
 
     #[ORM\Column(length: 13, nullable: true)]
-    #[Groups(['book:read', 'book:write', 'libraryBook:read'])]
+    #[Groups(['book:read', 'book:write', 'libraryBook:read', 'wishlist:read'])]
     private ?string $isbn = null;
 
     #[ORM\Column(length: 255, unique: true)]
-    #[Groups(['book:read', 'book:write', 'libraryBook:read'])]
+    #[Groups(['book:read', 'book:write', 'libraryBook:read', 'wishlist:read'])]
     private ?string $googleBooksId = null;
 
     #[ORM\ManyToOne(inversedBy: 'books')]

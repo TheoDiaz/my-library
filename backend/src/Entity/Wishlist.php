@@ -32,12 +32,13 @@ class Wishlist
 
     #[ORM\ManyToOne(inversedBy: 'wishlist')]
     #[ORM\JoinColumn(nullable: false)]
-    #[Groups(['wishlist:read', 'wishlist:write'])]
+    #[Groups(['wishlist:write'])]
     private ?User $user = null;
 
     #[ORM\ManyToOne]
     #[ORM\JoinColumn(nullable: false)]
     #[Groups(['wishlist:read', 'wishlist:write'])]
+    #[\Symfony\Component\Serializer\Annotation\MaxDepth(1)]
     private ?Book $book = null;
 
     public function getId(): ?int

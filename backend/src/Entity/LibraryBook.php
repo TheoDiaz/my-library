@@ -98,6 +98,11 @@ class LibraryBook
     #[Groups(['libraryBook:read', 'libraryBook:write'])]
     private Collection $categories;
 
+    #[ORM\Column(length: 20)]
+    #[Groups(['libraryBook:read', 'libraryBook:write'])]
+    #[ApiProperty(description: 'Le statut de lecture du livre (to_read, reading, read)')]
+    private string $status = 'to_read';
+
     public function __construct()
     {
         $this->loans = new ArrayCollection();
@@ -221,6 +226,17 @@ class LibraryBook
     public function removeCategory(Category $category): static
     {
         $this->categories->removeElement($category);
+        return $this;
+    }
+
+    public function getStatus(): string
+    {
+        return $this->status;
+    }
+
+    public function setStatus(string $status): static
+    {
+        $this->status = $status;
         return $this;
     }
 } 

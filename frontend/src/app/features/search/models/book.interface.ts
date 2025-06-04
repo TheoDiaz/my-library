@@ -18,6 +18,7 @@ export interface Book {
     type: string;
     identifier: string;
   }>;
+  libraryBookId?: number;
 }
 
 export interface BookSearchResult {

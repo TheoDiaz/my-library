@@ -37,10 +37,6 @@ export const routes: Routes = [
         loadComponent: () => import('./features/search/pages/search/search.page').then(m => m.SearchPage)
       },
       {
-        path: 'livres/details/:id',
-        loadComponent: () => import('./features/search/pages/book-details/book-details.page').then(m => m.BookDetailsPage)
-      },
-      {
         path: 'stats',
         loadComponent: () => import('./features/stats/pages/stats/stats.page').then(m => m.StatsPage)
       },
@@ -58,6 +54,11 @@ export const routes: Routes = [
         pathMatch: 'full'
       }
     ]
+  },
+  {
+    path: 'livres/details/:id',
+    loadComponent: () => import('./features/search/pages/book-details/book-details.page').then(m => m.BookDetailsPage),
+    canActivate: [AuthGuard]
   },
   {
     path: '**',

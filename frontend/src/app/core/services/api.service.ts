@@ -1,9 +1,14 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, from } from 'rxjs';
-import { switchMap, tap, catchError } from 'rxjs/operators';
+import { switchMap, tap, catchError, map } from 'rxjs/operators';
 import { environment } from '../../../environments/environment';
 import { GoogleBooksService } from './google-books.service';
+import { Book } from '../../features/search/models/book.interface';
+
+interface BookResponse extends Book {
+  libraryBookId?: number;
+}
 
 @Injectable({
   providedIn: 'root'
@@ -44,9 +49,23 @@ export class ApiService {
   }
 
   // Détail d'un livre
-  getBookDetails(id: string): Observable<any> {
+  getBookDetails(id: string): Observable<Book> {
     // On tente d'abord de récupérer le livre dans la BDD locale
-    return this.http.get(`${this.apiUrl}/api/books/${id}`).pipe(
+    return this.http.get<BookResponse>(`${this.apiUrl}/api/books/${id}`).pipe(
+      switchMap(response => {
+        // On récupère le lien avec la bibliothèque
+        return this.http.get<{inLibrary: boolean, libraryBookId: number | null}>(`${this.apiUrl}/api/library/book-link/${id}`).pipe(
+          map(libraryInfo => {
+            if (libraryInfo.inLibrary && libraryInfo.libraryBookId) {
+              return {
+                ...response,
+                libraryBookId: libraryInfo.libraryBookId
+              };
+            }
+            return response;
+          })
+        );
+      }),
       catchError(err => {
         // Si le livre n'est pas trouvé en BDD (404), fallback sur Google Books
         if (err.status === 404) {

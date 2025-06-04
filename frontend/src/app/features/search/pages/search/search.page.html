@@ -5,42 +5,87 @@
 </ion-header>
 
 <ion-content class="ion-padding library-bg">
+  <ion-segment [(ngModel)]="selectedTab">
+    <ion-segment-button value="library">Livres</ion-segment-button>
+    <ion-segment-button value="wishlist">Wishlist</ion-segment-button>
+  </ion-segment>
+
   <ion-searchbar [formControl]="searchControl" placeholder="Rechercher"></ion-searchbar>
 
-  <div *ngIf="loading" class="ion-text-center ion-padding">
-    <ion-skeleton-text animated style="width: 80%; height: 40px; margin: 10px auto;"></ion-skeleton-text>
-    <ion-skeleton-text animated style="width: 90%; height: 80px; margin: 10px auto;"></ion-skeleton-text>
-    <ion-skeleton-text animated style="width: 60%; height: 40px; margin: 10px auto;"></ion-skeleton-text>
-    <ion-spinner></ion-spinner>
-    <p>Chargement de la bibliothèque...</p>
-  </div>
-
-  <div *ngIf="error" class="ion-text-center ion-padding">
-    <ion-text color="danger">
-      <p>{{ error }}</p>
-    </ion-text>
-  </div>
-
-  <div *ngIf="!loading && filteredBooks.length === 0 && searchControl.value" class="ion-text-center ion-padding">
-    <ion-text color="medium">
-      <p>Aucun résultat trouvé</p>
-    </ion-text>
-  </div>
-
-  <div *ngIf="!loading && filteredBooks.length > 0" class="books-grid">
-    <div class="book-card" *ngFor="let lb of filteredBooks" (click)="onBookSelected(lb)">
-      <div class="book-cover">
-        <img *ngIf="getBookCover(lb); else defaultCover" [src]="getBookCover(lb)" [alt]="getBookTitle(lb)">
-        <ng-template #defaultCover>
-          <div class="book-cover-placeholder"></div>
-        </ng-template>
-      </div>
-      <div class="book-info">
-        <div class="book-title">{{ getBookTitle(lb) }}</div>
-        <div class="book-author">{{ getBookAuthor(lb) }}</div>
+  <!-- Onglet Bibliothèque -->
+  <ng-container *ngIf="selectedTab === 'library'">
+    <div *ngIf="loadingLibrary" class="ion-text-center ion-padding">
+      <ion-skeleton-text animated style="width: 80%; height: 40px; margin: 10px auto;"></ion-skeleton-text>
+      <ion-skeleton-text animated style="width: 90%; height: 80px; margin: 10px auto;"></ion-skeleton-text>
+      <ion-skeleton-text animated style="width: 60%; height: 40px; margin: 10px auto;"></ion-skeleton-text>
+      <ion-spinner></ion-spinner>
+      <p>Chargement de la bibliothèque...</p>
+    </div>
+    <div *ngIf="errorLibrary" class="ion-text-center ion-padding">
+      <ion-text color="danger">
+        <p>{{ errorLibrary }}</p>
+      </ion-text>
+    </div>
+    <div *ngIf="!loadingLibrary && filteredLibraryBooks.length === 0 && searchControl.value" class="ion-text-center ion-padding">
+      <ion-text color="medium">
+        <p>Aucun résultat trouvé</p>
+      </ion-text>
+    </div>
+    <div *ngIf="!loadingLibrary && filteredLibraryBooks.length > 0" class="books-grid">
+      <div class="book-card" *ngFor="let lb of filteredLibraryBooks" (click)="onBookSelected(lb)">
+        <div class="book-cover">
+          <img *ngIf="getBookCover(lb); else defaultCover" [src]="getBookCover(lb)" [alt]="getBookTitle(lb)">
+          <ng-template #defaultCover>
+            <div class="book-cover-placeholder"></div>
+          </ng-template>
+        </div>
+        <div class="book-info">
+          <div class="book-title">{{ getBookTitle(lb) }}</div>
+          <div class="book-author">{{ getBookAuthor(lb) }}</div>
+        </div>
       </div>
     </div>
-  </div>
+  </ng-container>
+
+  <!-- Onglet Wishlist -->
+  <ng-container *ngIf="selectedTab === 'wishlist'">
+    <div *ngIf="loadingWishlist" class="ion-text-center ion-padding">
+      <ion-skeleton-text animated style="width: 80%; height: 40px; margin: 10px auto;"></ion-skeleton-text>
+      <ion-skeleton-text animated style="width: 90%; height: 80px; margin: 10px auto;"></ion-skeleton-text>
+      <ion-skeleton-text animated style="width: 60%; height: 40px; margin: 10px auto;"></ion-skeleton-text>
+      <ion-spinner></ion-spinner>
+      <p>Chargement de la wishlist...</p>
+    </div>
+    <div *ngIf="errorWishlist" class="ion-text-center ion-padding">
+      <ion-text color="danger">
+        <p>{{ errorWishlist }}</p>
+      </ion-text>
+    </div>
+    <div *ngIf="!loadingWishlist && filteredWishlistBooks.length === 0 && searchControl.value" class="ion-text-center ion-padding">
+      <ion-text color="medium">
+        <p>Aucun résultat trouvé</p>
+      </ion-text>
+    </div>
+    <div *ngIf="!loadingWishlist && filteredWishlistBooks.length === 0 && !searchControl.value" class="ion-text-center ion-padding">
+      <ion-text color="medium">
+        <p>Aucun livre dans votre wishlist</p>
+      </ion-text>
+    </div>
+    <div *ngIf="!loadingWishlist && filteredWishlistBooks.length > 0" class="books-grid">
+      <div class="book-card" *ngFor="let book of filteredWishlistBooks" (click)="onBookSelected(book)">
+        <div class="book-cover">
+          <img *ngIf="getBookCover(book); else defaultCoverWishlist" [src]="getBookCover(book)" [alt]="getBookTitle(book)">
+          <ng-template #defaultCoverWishlist>
+            <div class="book-cover-placeholder"></div>
+          </ng-template>
+        </div>
+        <div class="book-info">
+          <div class="book-title">{{ getBookTitle(book) }}</div>
+          <div class="book-author">{{ getBookAuthor(book) }}</div>
+        </div>
+      </div>
+    </div>
+  </ng-container>
 </ion-content>
 
 <style>
@@ -90,7 +135,7 @@
   width: 100%;
   height: auto;
   aspect-ratio: 3/4;
-  object-fit: cover;
+  object-fit: contain;
   background: #f4f6fa00;
   box-shadow: none;
   display: block;
